@@ -1,0 +1,26 @@
+{
+  "page": {
+    "id": "94611add-fb91-450b-8fc1-ad1e3708087b",
+    "slug": "car-insurance",
+    "title": "Car Insurance",
+    "description": "It is what it is",
+    "status": "published",
+    "metaTitle": null,
+    "metaDescription": null,
+    "ogImage": null,
+    "createdAt": "2025-12-31T18:53:58.000Z",
+    "updatedAt": "2025-12-31T18:54:14.000Z"
+  },
+  "blocks": [
+    {
+      "id": "3f033652-fc13-4306-9165-a75073338c22",
+      "type": "markdown",
+      "order": 0,
+      "content": {
+        "markdown": "## Oh ok car inu\n\nyeah it is car"
+      },
+      "createdAt": "2025-12-31T18:54:13.000Z",
+      "updatedAt": "2025-12-31T18:54:13.000Z"
+    }
+  ]
+}
