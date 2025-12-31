@@ -1,102 +1,61 @@
-/**
- * LiteShow Content API Client
- *
- * Fetches published content from the LiteShow public API
- */
-
-const API_URL = import.meta.env.LITESHOW_API_URL || 'http://localhost:8000';
+const LITESHOW_API_URL = import.meta.env.LITESHOW_API_URL || 'https://api.liteshow.io';
 const PROJECT_SLUG = import.meta.env.LITESHOW_PROJECT_SLUG;
-
-if (!PROJECT_SLUG) {
-  throw new Error('LITESHOW_PROJECT_SLUG environment variable is required');
-}
 
 export interface Page {
   id: string;
   slug: string;
   title: string;
   description: string | null;
-  status: string;
-  hasUnpublishedChanges: boolean;
-  metaTitle: string | null;
   metaDescription: string | null;
   ogImage: string | null;
-  createdAt: Date | number;
-  updatedAt: Date | number;
-}
-
-export interface PageWithBlocks extends Page {
-  blocks: Array<{
-    id: string;
-    pageId: string;
-    type: string;
-    order: number;
-    content: any;
-    createdAt: Date | number;
-    updatedAt: Date | number;
-  }>;
+  blocks: any[];
 }
 
 export interface SiteSettings {
-  siteTitle: string;
-  siteDescription: string;
+  siteTitle: string | null;
+  siteDescription: string | null;
   faviconUrl: string | null;
 }
 
-/**
- * Fetch all published pages for the project
- */
 export async function getAllPages(): Promise<Page[]> {
   try {
-    const response = await fetch(`${API_URL}/public/sites/${PROJECT_SLUG}/pages`);
-
+    const response = await fetch(`${LITESHOW_API_URL}/public/${PROJECT_SLUG}/pages`);
     if (!response.ok) {
-      console.error(`Failed to fetch pages: ${response.status} ${response.statusText}`);
+      console.error('Failed to fetch pages:', response.statusText);
       return [];
     }
-
-    return await response.json();
+    const data = await response.json();
+    return data.pages || [];
   } catch (error) {
     console.error('Error fetching pages:', error);
     return [];
   }
 }
 
-/**
- * Fetch a specific page with its blocks
- */
-export async function getPageBySlug(slug: string): Promise<PageWithBlocks | null> {
+export async function getPageBySlug(slug: string): Promise<Page | null> {
   try {
-    const response = await fetch(`${API_URL}/public/sites/${PROJECT_SLUG}/pages/${slug}`);
-
+    const response = await fetch(`${LITESHOW_API_URL}/public/${PROJECT_SLUG}/pages/${slug}`);
     if (!response.ok) {
-      if (response.status === 404) {
-        return null;
-      }
-      console.error(`Failed to fetch page: ${response.status} ${response.statusText}`);
+      console.error(`Failed to fetch page ${slug}:`, response.statusText);
       return null;
     }
-
-    return await response.json();
+    const data = await response.json();
+    return data.page;
   } catch (error) {
-    console.error('Error fetching page:', error);
+    console.error(`Error fetching page ${slug}:`, error);
     return null;
   }
 }
 
-/**
- * Fetch site settings (title, description, favicon)
- */
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   try {
-    const response = await fetch(`${API_URL}/public/sites/${PROJECT_SLUG}/settings`);
-
+    const response = await fetch(`${LITESHOW_API_URL}/public/${PROJECT_SLUG}/settings`);
     if (!response.ok) {
-      console.error(`Failed to fetch site settings: ${response.status} ${response.statusText}`);
+      console.error('Failed to fetch site settings:', response.statusText);
       return null;
     }
-
-    return await response.json();
+    const data = await response.json();
+    return data.settings;
   } catch (error) {
     console.error('Error fetching site settings:', error);
     return null;
