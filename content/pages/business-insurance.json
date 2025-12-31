@@ -1,0 +1,30 @@
+{
+  "page": {
+    "id": "ed57f5ba-1b59-411b-9516-48b03c0b9621",
+    "slug": "business-insurance",
+    "title": "Business Insurance",
+    "description": "Information is here",
+    "status": "published",
+    "metaTitle": null,
+    "metaDescription": null,
+    "ogImage": null,
+    "createdAt": "2025-12-31T18:53:24.000Z",
+    "updatedAt": "2025-12-31T18:53:47.000Z"
+  },
+  "blocks": [
+    {
+      "id": "0b964bec-ae53-4356-908a-4412edea2e9b",
+      "type": "hero",
+      "order": 0,
+      "content": {
+        "headline": "Get insurance",
+        "subheadline": "Do it",
+        "ctaText": "Ok go",
+        "ctaUrl": "https://google.com",
+        "backgroundImage": ""
+      },
+      "createdAt": "2025-12-31T18:53:41.000Z",
+      "updatedAt": "2025-12-31T18:53:41.000Z"
+    }
+  ]
+}
