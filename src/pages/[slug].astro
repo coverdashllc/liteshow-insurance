@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroBlock from '../components/blocks/HeroBlock.astro';
+import FeaturesBlock from '../components/blocks/FeaturesBlock.astro';
+import TestimonialsBlock from '../components/blocks/TestimonialsBlock.astro';
+import MarkdownBlock from '../components/blocks/MarkdownBlock.astro';
+import CtaBlock from '../components/blocks/CtaBlock.astro';
+import FaqBlock from '../components/blocks/FaqBlock.astro';
+import { getAllPages, getPageBySlug, getSiteSettings } from '../lib/content-api';
+
+// Generate static paths at build time
+export async function getStaticPaths() {
+  // Fetch all published pages from API
+  const allPages = await getAllPages();
+
+  return allPages.map(page => ({
+    params: { slug: page.slug },
+    props: { pageId: page.id },
+  }));
+}
+
+const { pageId } = Astro.props;
+const { slug } = Astro.params;
+
+// Fetch site settings
+const siteSettings = await getSiteSettings();
+
+// Fetch page with blocks from API
+const page = await getPageBySlug(slug as string);
+
+if (!page) {
+  return Astro.redirect('/404');
+}
+
+const blockComponents: Record<string, any> = {
+  hero: HeroBlock,
+  features: FeaturesBlock,
+  testimonials: TestimonialsBlock,
+  markdown: MarkdownBlock,
+  cta: CtaBlock,
+  faq: FaqBlock,
+};
+---
+
+<BaseLayout
+  title={page.metaTitle || page.title}
+  description={page.metaDescription || page.description || undefined}
+  ogImage={page.ogImage || undefined}
+  siteSettings={siteSettings}
+>
+  <main>
+    {page.blocks.map((block: any) => {
+      const Component = blockComponents[block.type];
+      if (!Component) {
+        console.warn(`Unknown block type: ${block.type}`);
+        return null;
+      }
+      return <Component content={block.content} />;
+    })}
+  </main>
+</BaseLayout>
